@@ -58,16 +58,24 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Specific HTML endpoints served with dynamic absolute Open Graph meta tags for WhatsApp
-app.get(['/', '/index.html'], (req, res) => {
-  serveHtmlWithAbsoluteOg(path.join(__dirname, 'index.html'), req, res);
-});
+const sacredGardenPath = path.join(__dirname, 'webgency.tilda.ws', 'thesacredgarden830f.html');
 
-app.get(['/webgency.tilda.ws/thesacredgarden830f.html', '/thesacredgarden830f.html', '/thesacredgarden'], (req, res) => {
-  serveHtmlWithAbsoluteOg(path.join(__dirname, 'webgency.tilda.ws', 'thesacredgarden830f.html'), req, res);
-});
-
-app.get(['/webgency.tilda.ws/thesacredgarden.html', '/thesacredgarden.html'], (req, res) => {
-  serveHtmlWithAbsoluteOg(path.join(__dirname, 'webgency.tilda.ws', 'thesacredgarden.html'), req, res);
+app.get([
+  '/',
+  '/index',
+  '/index.html',
+  '/thesacredgarden830f',
+  '/thesacredgarden830f.html',
+  '/thesacredgarden',
+  '/thesacredgarden.html',
+  '/webgency.tilda.ws',
+  '/webgency.tilda.ws/',
+  '/webgency.tilda.ws/thesacredgarden830f',
+  '/webgency.tilda.ws/thesacredgarden830f.html',
+  '/webgency.tilda.ws/thesacredgarden',
+  '/webgency.tilda.ws/thesacredgarden.html'
+], (req, res) => {
+  serveHtmlWithAbsoluteOg(sacredGardenPath, req, res);
 });
 
 // Explicit couple.jpg endpoints
@@ -78,6 +86,15 @@ app.get(['/couple.jpg', '/webgency.tilda.ws/couple.jpg'], (req, res) => {
 // Serve all static assets from the current directory and subdirectories
 app.use(express.static(path.join(__dirname), { index: false }));
 app.use('/webgency.tilda.ws', express.static(path.join(__dirname, 'webgency.tilda.ws'), { index: false }));
+
+// Fallback for any other page route: render invitation directly instead of "Cannot GET"
+app.use((req, res, next) => {
+  if (req.method !== 'GET') return next();
+  if (req.path.startsWith('/api/') || req.path.match(/\.(jpg|jpeg|png|gif|mp4|mp3|mpeg|css|js|ico|svg|woff2?|map)$/i)) {
+    return next();
+  }
+  serveHtmlWithAbsoluteOg(sacredGardenPath, req, res);
+});
 
 // ============================================================================
 // MongoDB Schema & Model
