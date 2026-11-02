@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html>
+<body>
+<iframe id="testframe" src="http://localhost:8080/webgency.tilda.ws/thesacredgarden.html" style="width:1280px;height:900px;"></iframe>
+<pre id="out"></pre>
+<script>
+window.onload = () => {
+  setTimeout(() => {
+    try {
+      const doc = document.getElementById('testframe').contentDocument;
+      const wrap = doc.querySelector('.hero-top-garland-wrap');
+      const img = wrap ? wrap.querySelector('img') : null;
+      const res = {
+        wrap_found: !!wrap,
+        wrap_display: wrap ? window.getComputedStyle(wrap).display : null,
+        wrap_visibility: wrap ? window.getComputedStyle(wrap).visibility : null,
+        wrap_opacity: wrap ? window.getComputedStyle(wrap).opacity : null,
+        wrap_rect: wrap ? wrap.getBoundingClientRect() : null,
+        img_found: !!img,
+        img_src: img ? img.src : null,
+        img_complete: img ? img.complete : null,
+        img_naturalWidth: img ? img.naturalWidth : null,
+        img_naturalHeight: img ? img.naturalHeight : null,
+        img_display: img ? window.getComputedStyle(img).display : null,
+        img_visibility: img ? window.getComputedStyle(img).visibility : null,
+        img_opacity: img ? window.getComputedStyle(img).opacity : null,
+        img_rect: img ? img.getBoundingClientRect() : null
+      };
+      document.getElementById('out').innerText = JSON.stringify(res, null, 2);
+    } catch(e) {
+      document.getElementById('out').innerText = 'ERROR: ' + e;
+    }
+  }, 1000);
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+
+# HTTrack cache
+hts-cache/
+hts-log.txt
+
+# OS metadata
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log

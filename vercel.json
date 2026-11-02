@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "linshaandshihab.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "linshaandshihab.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "linshaandshihab.js"
+    }
+  ]
+}
