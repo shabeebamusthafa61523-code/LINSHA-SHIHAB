@@ -19,10 +19,35 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Helper: dynamically determine host & protocol for Open Graph scrapers (WhatsApp, iMessage, etc.)
+function getBaseUrl(req) {
+  const forwardedProto = req.headers['x-forwarded-proto'];
+  const protocol = forwardedProto ? forwardedProto.split(',')[0].trim() : req.protocol;
+  const host = req.get('host');
+  return `${protocol}://${host}`;
+}
+
+function serveHtmlWithAbsoluteOg(filePath, req, res) {
+  try {
+    let html = fs.readFileSync(filePath, 'utf-8');
+    const baseUrl = getBaseUrl(req);
+    // Replace relative paths with absolute URL so WhatsApp thumbnail scraper picks up the couple photo
+    html = html.replace(/content="\/couple\.jpg"/g, `content="${baseUrl}/couple.jpg"`);
+    html = html.replace(/href="\/couple\.jpg"/g, `href="${baseUrl}/couple.jpg"`);
+    html = html.replace(/content="thesacredgarden830f\.html"/g, `content="${baseUrl}/webgency.tilda.ws/thesacredgarden830f.html"`);
+    html = html.replace(/content="thesacredgarden\.html"/g, `content="${baseUrl}/webgency.tilda.ws/thesacredgarden830f.html"`);
+    res.setHeader('Content-Type', 'text/html; charset=UTF-8');
+    res.send(html);
+  } catch (err) {
+    res.status(500).send('Error loading page: ' + err.message);
+  }
+}
 
 // MongoDB Connection URI (Using existing weddinglamiazenbaq database and wishes collection)
 const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://shabeeba:9995982324@cluster0.i23tzbf.mongodb.net/weddinglamiazenbaq?retryWrites=true&w=majority";
@@ -32,9 +57,27 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Specific HTML endpoints served with dynamic absolute Open Graph meta tags for WhatsApp
+app.get(['/', '/index.html'], (req, res) => {
+  serveHtmlWithAbsoluteOg(path.join(__dirname, 'index.html'), req, res);
+});
+
+app.get(['/webgency.tilda.ws/thesacredgarden830f.html', '/thesacredgarden830f.html', '/thesacredgarden'], (req, res) => {
+  serveHtmlWithAbsoluteOg(path.join(__dirname, 'webgency.tilda.ws', 'thesacredgarden830f.html'), req, res);
+});
+
+app.get(['/webgency.tilda.ws/thesacredgarden.html', '/thesacredgarden.html'], (req, res) => {
+  serveHtmlWithAbsoluteOg(path.join(__dirname, 'webgency.tilda.ws', 'thesacredgarden.html'), req, res);
+});
+
+// Explicit couple.jpg endpoints
+app.get(['/couple.jpg', '/webgency.tilda.ws/couple.jpg'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'couple.jpg'));
+});
+
 // Serve all static assets from the current directory and subdirectories
-app.use(express.static(path.join(__dirname)));
-app.use('/webgency.tilda.ws', express.static(path.join(__dirname, 'webgency.tilda.ws')));
+app.use(express.static(path.join(__dirname), { index: false }));
+app.use('/webgency.tilda.ws', express.static(path.join(__dirname, 'webgency.tilda.ws'), { index: false }));
 
 // ============================================================================
 // MongoDB Schema & Model
@@ -179,11 +222,6 @@ app.get('/health', (req, res) => {
     partition: 'linshaandshihab',
     mongodbState: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
   });
-});
-
-// 4. Default home redirect to wedding invitation
-app.get('/', (req, res) => {
-  res.redirect('/webgency.tilda.ws/thesacredgarden830f.html');
 });
 
 // ============================================================================
