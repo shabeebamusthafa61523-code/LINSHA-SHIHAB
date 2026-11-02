@@ -1,19 +1,19 @@
 {
-  "version": 2,
-  "builds": [
+  "redirects": [
     {
-      "src": "linshaandshihab.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "linshaandshihab.js"
+      "source": "/",
+      "destination": "/webgency.tilda.ws/thesacredgarden830f.html",
+      "permanent": false
     },
     {
-      "src": "/(.*)",
-      "dest": "linshaandshihab.js"
+      "source": "/thesacredgarden830f",
+      "destination": "/webgency.tilda.ws/thesacredgarden830f.html",
+      "permanent": false
+    },
+    {
+      "source": "/webgency.tilda.ws/thesacredgarden830f",
+      "destination": "/webgency.tilda.ws/thesacredgarden830f.html",
+      "permanent": false
     }
   ]
 }

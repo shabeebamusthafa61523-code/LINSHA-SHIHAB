@@ -939,9 +939,12 @@ alt='' imgfield='tn_img_1780167004386000002'
       }
 
       // Sync live wishes with MongoDB Atlas
+      var RENDER_BACKEND = window.RENDER_API_URL || "";
+      var WISHES_API = (RENDER_BACKEND ? RENDER_BACKEND.replace(/\/+$/, "") : "") + "/api/wishes";
+
       function fetchWishesFromAPI() {
         if (typeof fetch !== 'function') return;
-        fetch('/api/wishes')
+        fetch(WISHES_API)
           .then(function(res) {
             if (!res.ok) throw new Error('HTTP ' + res.status);
             return res.json();
@@ -993,7 +996,7 @@ alt='' imgfield='tn_img_1780167004386000002'
 
         // 2. Persist to MongoDB Atlas via backend API
         if (typeof fetch === 'function') {
-          fetch('/api/wishes', {
+          fetch(WISHES_API, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(newEntry)
