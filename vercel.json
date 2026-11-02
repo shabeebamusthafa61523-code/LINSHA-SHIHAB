@@ -15,5 +15,11 @@
       "destination": "/webgency.tilda.ws/thesacredgarden830f.html",
       "permanent": false
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/:match*",
+      "destination": "https://linsha-shihab.onrender.com/api/:match*"
+    }
   ]
 }
