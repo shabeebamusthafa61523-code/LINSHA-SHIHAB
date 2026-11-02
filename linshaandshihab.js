@@ -235,18 +235,22 @@ async function startServer() {
 
     await seedInitialWishes();
 
-    app.listen(PORT, () => {
-      console.log(`=======================================================`);
-      console.log(` Linsha & Shihab Wedding Server is Live!`);
-      console.log(` Open Invitation in Browser:`);
-      console.log(`    http://localhost:${PORT}`);
-      console.log(` Wishes API:`);
-      console.log(`    http://localhost:${PORT}/api/wishes`);
-      console.log(`=======================================================`);
-    });
+    if (!process.env.VERCEL) {
+      app.listen(PORT, () => {
+        console.log(`=======================================================`);
+        console.log(` Linsha & Shihab Wedding Server is Live!`);
+        console.log(` Open Invitation in Browser:`);
+        console.log(`    http://localhost:${PORT}`);
+        console.log(` Wishes API:`);
+        console.log(`    http://localhost:${PORT}/api/wishes`);
+        console.log(`=======================================================`);
+      });
+    }
   } catch (err) {
     console.error('MongoDB connection error:', err.message);
-    process.exit(1);
+    if (!process.env.VERCEL) {
+      process.exit(1);
+    }
   }
 }
 
