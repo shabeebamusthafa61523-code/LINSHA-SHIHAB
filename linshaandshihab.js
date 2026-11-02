@@ -39,6 +39,8 @@ function serveHtmlWithAbsoluteOg(filePath, req, res) {
     const baseUrl = getBaseUrl(req);
     // Replace relative paths with absolute URL so WhatsApp thumbnail scraper picks up the couple photo
     html = html.replace(/content="\/couple\.jpg"/g, `content="${baseUrl}/couple.jpg"`);
+    html = html.replace(/content="\/og-thumb\.jpg"/g, `content="${baseUrl}/og-thumb.jpg"`);
+    html = html.replace(/href="\/og-thumb\.jpg"/g, `href="${baseUrl}/og-thumb.jpg"`);
     html = html.replace(/href="\/couple\.jpg"/g, `href="${baseUrl}/couple.jpg"`);
     html = html.replace(/content="thesacredgarden830f\.html"/g, `content="${baseUrl}/webgency.tilda.ws/thesacredgarden830f.html"`);
     html = html.replace(/content="thesacredgarden\.html"/g, `content="${baseUrl}/webgency.tilda.ws/thesacredgarden830f.html"`);
@@ -79,6 +81,10 @@ app.get([
 });
 
 // Explicit couple.jpg endpoints
+app.get(['/og-thumb.jpg', '/webgency.tilda.ws/og-thumb.jpg'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'og-thumb.jpg'));
+});
+
 app.get(['/couple.jpg', '/webgency.tilda.ws/couple.jpg'], (req, res) => {
   res.sendFile(path.join(__dirname, 'couple.jpg'));
 });
