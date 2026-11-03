@@ -178,12 +178,76 @@ document.addEventListener('DOMContentLoaded',t_setvisRecs);}})();</script></head
   var iconPause  = document.getElementById('weiIconPause');
   var iconPlay   = document.getElementById('weiIconPlay');
   var done       = false;
+  var heroStarted = false;
+  function getHeroVideo() {
+    return document.getElementById('heroVideo') || document.querySelector('.t396 video');
+  }
+
+  function setupHeroVideo() {
+    var hv = getHeroVideo();
+    if (!hv) return;
+    hv.muted = true;
+    hv.defaultMuted = true;
+    hv.loop = true;
+    hv.preload = 'auto';
+
+    if (!hv._loopBound) {
+      hv._loopBound = true;
+      // Proactive zero-lag loop: rewinds 0.08s before duration to prevent browser EOF stalls
+      function checkLoop() {
+        if (!hv.paused && hv.duration > 0) {
+          if (hv.currentTime >= (hv.duration - 0.08)) {
+            hv.currentTime = 0;
+            var p = hv.play();
+            if (p && p.catch) p.catch(function(){});
+          }
+        }
+        requestAnimationFrame(checkLoop);
+      }
+      requestAnimationFrame(checkLoop);
+
+      hv.addEventListener('ended', function () {
+        hv.currentTime = 0;
+        var p = hv.play();
+        if (p && p.catch) p.catch(function(){});
+      });
+      hv.addEventListener('timeupdate', function () {
+        if (hv.duration && hv.currentTime >= (hv.duration - 0.08)) {
+          hv.currentTime = 0;
+          var p = hv.play();
+          if (p && p.catch) p.catch(function(){});
+        }
+      });
+    }
+  }
+
+  function triggerHeroPlay() {
+    if (heroStarted) return;
+    heroStarted = true;
+    var hv = getHeroVideo();
+    if (hv) {
+      setupHeroVideo();
+      hv.muted = true;
+      hv.defaultMuted = true;
+      hv.currentTime = 0;
+      var hp = hv.play();
+      if (hp && hp.catch) hp.catch(function(){});
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupHeroVideo);
+  } else {
+    setupHeroVideo();
+  }
+
   var wasPlayingBeforeHidden = false;
 
   if (window.location.search.indexOf('nosplash') !== -1) {
     if (overlay) overlay.style.display = 'none';
     if (videoWrap) videoWrap.style.display = 'none';
     if (audioBtn) audioBtn.style.display = 'none';
+    triggerHeroPlay();
   }
 
   function updateAudioBtnUI() {
@@ -214,6 +278,17 @@ document.addEventListener('DOMContentLoaded',t_setvisRecs);}})();</script></head
   function startVideo() {
     if (done) return;
     done = true;
+    // Pre-prime hero video decoder
+    var hvPrime = getHeroVideo();
+    if (hvPrime) {
+      hvPrime.muted = true;
+      hvPrime.defaultMuted = true;
+      hvPrime.preload = 'auto';
+      hvPrime.load();
+    }
+    // Autoplay hero video within 2 seconds after clicking tap to open
+    setTimeout(triggerHeroPlay, 2000);
+
 
     // Fade out envelope
     if (overlay) {
@@ -236,6 +311,7 @@ document.addEventListener('DOMContentLoaded',t_setvisRecs);}})();</script></head
   }
 
   function endSequence() {
+    triggerHeroPlay();
     // Fade out video
     if (videoWrap) {
       videoWrap.classList.remove('wei-video-in');
@@ -505,7 +581,7 @@ document.addEventListener('DOMContentLoaded',t_setvisRecs);}})();</script></head
 <div class="hero-top-garland-wrap">
   <img class="tn-atom__img loaded" data-original="https://static.tildacdn.net/tild3732-6364-4131-b837-353363666335/623915249_2629494717.png" src="garland_orig.png" onerror="this.onerror=null;this.src='https://static.tildacdn.net/tild3732-6364-4131-b837-353363666335/623915249_2629494717.png';" alt="" imgfield="tn_img_1780167388618000002" style="width: 100%; height: auto; display: block; margin: 0 auto; transform: scaleY(-1); transform-origin: center center;">
 </div>
-<div class='t396__elem tn-elem tn-elem__24084315131773841348614000001' data-elem-id='1773841348614000001' data-elem-type='html' data-field-top-value="0" data-field-left-value="375" data-field-height-value="762" data-field-width-value="450" data-field-axisy-value="top" data-field-axisx-value="left" data-field-container-value="grid" data-field-topunits-value="px" data-field-leftunits-value="px" data-field-heightunits-value="px" data-field-widthunits-value="px" data-animate-mobile="y" data-field-widthmode-value="fixed" data-field-left-res-320-value="-65" data-field-height-res-320-value="492" data-field-width-res-320-value="450" data-field-widthmode-res-320-value="fixed" data-field-left-res-480-value="15" data-field-width-res-480-value="450" data-field-widthmode-res-480-value="fixed" data-field-top-res-640-value="0" data-field-left-res-640-value="95" data-field-width-res-640-value="450" data-field-widthmode-res-640-value="fixed" data-field-top-res-960-value="0" data-field-left-res-960-value="255" data-field-height-res-960-value="491" data-field-width-res-960-value="450" data-field-container-res-960-value="grid" data-field-widthmode-res-960-value="fixed"> <div class='tn-atom tn-atom__html'> <video autoplay muted loop playsinline webkit-playsinline style="width: 100%; height: auto; object-fit: cover; display: block;"> <source src="../hero2.mp4" type="video/mp4"> <source src="hero2.mp4" type="video/mp4">
+<div class='t396__elem tn-elem tn-elem__24084315131773841348614000001' data-elem-id='1773841348614000001' data-elem-type='html' data-field-top-value="0" data-field-left-value="375" data-field-height-value="762" data-field-width-value="450" data-field-axisy-value="top" data-field-axisx-value="left" data-field-container-value="grid" data-field-topunits-value="px" data-field-leftunits-value="px" data-field-heightunits-value="px" data-field-widthunits-value="px" data-animate-mobile="y" data-field-widthmode-value="fixed" data-field-left-res-320-value="-65" data-field-height-res-320-value="492" data-field-width-res-320-value="450" data-field-widthmode-res-320-value="fixed" data-field-left-res-480-value="15" data-field-width-res-480-value="450" data-field-widthmode-res-480-value="fixed" data-field-top-res-640-value="0" data-field-left-res-640-value="95" data-field-width-res-640-value="450" data-field-widthmode-res-640-value="fixed" data-field-top-res-960-value="0" data-field-left-res-960-value="255" data-field-height-res-960-value="491" data-field-width-res-960-value="450" data-field-container-res-960-value="grid" data-field-widthmode-res-960-value="fixed"> <div class='tn-atom tn-atom__html'> <video id="heroVideo" muted loop playsinline webkit-playsinline preload="auto" disablePictureInPicture style="width: 100%; height: auto; object-fit: cover; display: block; backface-visibility: hidden; -webkit-backface-visibility: hidden; transform: translateZ(0); will-change: transform;"> <source src="../hero2.mp4" type="video/mp4"> <source src="hero2.mp4" type="video/mp4">
 Your browser does not support the video tag.
 </video> </div> </div> <div class='t396__elem tn-elem tn-elem__24084315131763402091707' data-elem-id='1763402091707' data-elem-type='shape' data-field-top-value="0" data-field-left-value="375" data-field-height-value="676" data-field-width-value="450" data-field-axisy-value="top" data-field-axisx-value="left" data-field-container-value="grid" data-field-topunits-value="px" data-field-leftunits-value="px" data-field-heightunits-value="px" data-field-widthunits-value="px" data-field-widthmode-value="fixed" data-field-left-res-320-value="-65" data-field-left-res-480-value="15" data-field-left-res-640-value="95" data-field-left-res-960-value="255"> <div class='tn-atom'> </div> </div> <div class='t396__elem tn-elem tn-elem__24084315131779527203760000001' data-elem-id='1779527203760000001' data-elem-type='image' data-field-top-value="753" data-field-left-value="228" data-field-height-value="487" data-field-width-value="744" data-field-axisy-value="top" data-field-axisx-value="left" data-field-container-value="grid" data-field-topunits-value="px" data-field-leftunits-value="px" data-field-heightunits-value="px" data-field-widthunits-value="px" data-field-filewidth-value="1680" data-field-fileheight-value="833" data-field-heightmode-value="fixed" data-field-top-res-320-value="763" data-field-left-res-320-value="-212" data-field-height-res-320-value="477" data-field-heightmode-res-320-value="fixed" data-field-top-res-480-value="763" data-field-left-res-480-value="-132" data-field-height-res-480-value="470" data-field-heightmode-res-480-value="fixed" data-field-top-res-640-value="763" data-field-left-res-640-value="-52" data-field-height-res-640-value="477" data-field-heightmode-res-640-value="fixed" data-field-top-res-960-value="758" data-field-left-res-960-value="108" data-field-height-res-960-value="479" data-field-heightmode-res-960-value="fixed"> <div class='tn-atom'> <img class='tn-atom__img t-img' data-original='../static.tildacdn.net/tild3134-6461-4832-a236-633431616631/623915249_2629494717.png'
 src='../thb.tildacdn.net/tild3134-6461-4832-a236-633431616631/-/resize/20x/623915249_2629494717.png'

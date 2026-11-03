@@ -90,6 +90,15 @@ app.get(['/couple.jpg', '/webgency.tilda.ws/couple.jpg'], (req, res) => {
 });
 
 // Explicit splash video endpoints (case-insensitive fallback)
+// Explicit hero2.mp4 endpoint with high-speed immutable caching
+app.get([
+  '/hero2.mp4',
+  '/webgency.tilda.ws/hero2.mp4'
+], (req, res) => {
+  res.setHeader('Cache-Control', 'public, max-age=604800, immutable');
+  res.sendFile(path.join(__dirname, 'hero2.mp4'));
+});
+
 app.get([
   '/splash.mp4',
   '/splash.MP4',
@@ -103,8 +112,17 @@ app.get([
 });
 
 // Serve all static assets from the current directory and subdirectories
-app.use(express.static(path.join(__dirname), { index: false }));
-app.use('/webgency.tilda.ws', express.static(path.join(__dirname, 'webgency.tilda.ws'), { index: false }));
+const staticOptions = {
+  index: false,
+  maxAge: '7d',
+  setHeaders: (res, filePath) => {
+    if (/\.(mp4|MP4|mp3|mpeg|jpg|jpeg|png|gif|webp|svg|woff2?|css|js)$/i.test(filePath)) {
+      res.setHeader('Cache-Control', 'public, max-age=604800, immutable');
+    }
+  }
+};
+app.use(express.static(path.join(__dirname), staticOptions));
+app.use('/webgency.tilda.ws', express.static(path.join(__dirname, 'webgency.tilda.ws'), staticOptions));
 
 // Fallback for any other page route: render invitation directly instead of "Cannot GET"
 app.use((req, res, next) => {
