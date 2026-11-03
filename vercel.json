@@ -18,6 +18,14 @@
   ],
   "rewrites": [
     {
+      "source": "/webgency.tilda.ws/splash.mp4",
+      "destination": "/webgency.tilda.ws/splash.MP4"
+    },
+    {
+      "source": "/splash.mp4",
+      "destination": "/splash.MP4"
+    },
+    {
       "source": "/api/:match*",
       "destination": "https://linsha-shihab.onrender.com/api/:match*"
     }

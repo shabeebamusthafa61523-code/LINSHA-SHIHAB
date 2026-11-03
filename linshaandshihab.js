@@ -89,6 +89,19 @@ app.get(['/couple.jpg', '/webgency.tilda.ws/couple.jpg'], (req, res) => {
   res.sendFile(path.join(__dirname, 'couple.jpg'));
 });
 
+// Explicit splash video endpoints (case-insensitive fallback)
+app.get([
+  '/splash.mp4',
+  '/splash.MP4',
+  '/webgency.tilda.ws/splash.mp4',
+  '/webgency.tilda.ws/splash.MP4'
+], (req, res) => {
+  const filePath = fs.existsSync(path.join(__dirname, 'splash.MP4'))
+    ? path.join(__dirname, 'splash.MP4')
+    : path.join(__dirname, 'splash.mp4');
+  res.sendFile(filePath);
+});
+
 // Serve all static assets from the current directory and subdirectories
 app.use(express.static(path.join(__dirname), { index: false }));
 app.use('/webgency.tilda.ws', express.static(path.join(__dirname, 'webgency.tilda.ws'), { index: false }));

@@ -159,11 +159,16 @@ document.addEventListener('DOMContentLoaded',t_setvisRecs);}})();</script></head
     alt="Open your invitation"
     draggable="false"
   > <div id="weiTapWrap"> <div class="wei-chevron"></div> <div id="weiTapLabel">Tap to open</div> </div> </div> <!-- Video --> <div id="weiVideoWrap"> <video id="weiVideo"
-    src="../videosplash.mp4"
+    src="../splash.MP4"
     muted
     playsinline
     preload="auto"
-  ></video> </div> <!-- Floating play/pause button --> <div id="weiAudioBtn"> <svg id="weiIconPause" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display:block"> <rect x="6" y="5" width="4" height="14" rx="1"/> <rect x="14" y="5" width="4" height="14" rx="1"/> </svg> <svg id="weiIconPlay" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display:none"> <polygon points="5,3 19,12 5,21"/> </svg> </div> <script>
+  >
+    <source src="../splash.MP4" type="video/mp4">
+    <source src="splash.MP4" type="video/mp4">
+    <source src="../splash.mp4" type="video/mp4">
+    <source src="splash.mp4" type="video/mp4">
+  </video> </div> <!-- Floating play/pause button --> <div id="weiAudioBtn"> <svg id="weiIconPause" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display:block"> <rect x="6" y="5" width="4" height="14" rx="1"/> <rect x="14" y="5" width="4" height="14" rx="1"/> </svg> <svg id="weiIconPlay" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display:none"> <polygon points="5,3 19,12 5,21"/> </svg> </div> <script>
 (function () {
   var overlay    = document.getElementById('weiOverlay');
   var videoWrap  = document.getElementById('weiVideoWrap');
