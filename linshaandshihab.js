@@ -59,17 +59,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Health check endpoint for keep-alive monitoring (UptimeRobot, cron-job.org)
-app.get(['/health', '/api/health'], (req, res) => {
-  res.json({
-    status: 'online',
-    uptime: Math.floor(process.uptime()),
-    database: 'weddinglamiazenbaq',
-    partition: 'linshaandshihab',
-    mongodbState: mongoose.connection.readyState === 1 ? 'connected' : 'connecting'
-  });
-});
-
 // Specific HTML endpoints served with dynamic absolute Open Graph meta tags for WhatsApp
 const sacredGardenPath = path.join(__dirname, 'webgency.tilda.ws', 'thesacredgarden830f.html');
 
@@ -279,32 +268,40 @@ app.post('/api/wishes', async (req, res) => {
   }
 });
 
-
+// 3. GET /health - Server & MongoDB Status
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'online',
+    database: 'weddinglamiazenbaq',
+    partition: 'linshaandshihab',
+    mongodbState: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
+  });
+});
 
 // ============================================================================
 // Start Server
 // ============================================================================
-// 1. Bind to PORT immediately so Render detects the server is UP in < 1 second
-app.listen(PORT, () => {
-  console.log('=======================================================');
-  console.log(' Linsha & Shihab Wedding Server is Live!');
-  console.log(' Listening on port: ' + PORT);
-  console.log(' Wishes API: /api/wishes');
-  console.log('=======================================================');
-});
-
-// 2. Connect to MongoDB Atlas in the background
-async function connectDatabase() {
+async function startServer() {
   try {
     console.log('Connecting to MongoDB Atlas (weddinglamiazenbaq.wishes)...');
     await mongoose.connect(MONGO_URI);
     console.log('✓ Connected to MongoDB Atlas successfully!');
+
     await seedInitialWishes();
+
+    app.listen(PORT, () => {
+      console.log('=======================================================');
+      console.log(' Linsha & Shihab Wedding Server is Live!');
+      console.log(' Open Invitation in Browser:');
+      console.log(`    http://localhost:${PORT}`);
+      console.log(' Wishes API:');
+      console.log(`    http://localhost:${PORT}/api/wishes`);
+      console.log('=======================================================');
+    });
   } catch (err) {
     console.error('MongoDB connection error:', err.message);
+    process.exit(1);
   }
 }
 
-connectDatabase();
-
-module.exports = app;
+startServer();
