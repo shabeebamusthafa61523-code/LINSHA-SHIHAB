@@ -59,6 +59,17 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Health check endpoint for keep-alive monitoring (UptimeRobot, cron-job.org)
+app.get(['/health', '/api/health'], (req, res) => {
+  res.json({
+    status: 'online',
+    uptime: Math.floor(process.uptime()),
+    database: 'weddinglamiazenbaq',
+    partition: 'linshaandshihab',
+    mongodbState: mongoose.connection.readyState === 1 ? 'connected' : 'connecting'
+  });
+});
+
 // Specific HTML endpoints served with dynamic absolute Open Graph meta tags for WhatsApp
 const sacredGardenPath = path.join(__dirname, 'webgency.tilda.ws', 'thesacredgarden830f.html');
 
@@ -268,15 +279,7 @@ app.post('/api/wishes', async (req, res) => {
   }
 });
 
-// 3. GET /health - Server & MongoDB Status
-app.get('/health', (req, res) => {
-  res.json({
-    status: 'online',
-    database: 'weddinglamiazenbaq',
-    partition: 'linshaandshihab',
-    mongodbState: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
-  });
-});
+
 
 // ============================================================================
 // Start Server
@@ -303,3 +306,5 @@ async function connectDatabase() {
 }
 
 connectDatabase();
+
+module.exports = app;
