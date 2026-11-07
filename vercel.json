@@ -1,4 +1,5 @@
 {
+  "cleanUrls": false,
   "redirects": [
     {
       "source": "/",
@@ -12,6 +13,26 @@
     },
     {
       "source": "/webgency.tilda.ws/thesacredgarden830f",
+      "destination": "/webgency.tilda.ws/thesacredgarden830f.html",
+      "permanent": false
+    },
+    {
+      "source": "/thesacredgarden",
+      "destination": "/webgency.tilda.ws/thesacredgarden830f.html",
+      "permanent": false
+    },
+    {
+      "source": "/webgency.tilda.ws/thesacredgarden",
+      "destination": "/webgency.tilda.ws/thesacredgarden830f.html",
+      "permanent": false
+    },
+    {
+      "source": "/thesacredgarden.html",
+      "destination": "/webgency.tilda.ws/thesacredgarden830f.html",
+      "permanent": false
+    },
+    {
+      "source": "/webgency.tilda.ws",
       "destination": "/webgency.tilda.ws/thesacredgarden830f.html",
       "permanent": false
     }
@@ -28,6 +49,26 @@
     {
       "source": "/api/:match*",
       "destination": "https://linsha-shihab.onrender.com/api/:match*"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)\\.(mp4|MP4|mp3|mpeg|jpg|jpeg|png|gif|webp|svg|woff2?)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800, immutable"
+        }
+      ]
     }
   ]
 }
