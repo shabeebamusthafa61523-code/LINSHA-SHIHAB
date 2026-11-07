@@ -281,27 +281,25 @@ app.get('/health', (req, res) => {
 // ============================================================================
 // Start Server
 // ============================================================================
-async function startServer() {
+// 1. Bind to PORT immediately so Render detects the server is UP in < 1 second
+app.listen(PORT, () => {
+  console.log('=======================================================');
+  console.log(' Linsha & Shihab Wedding Server is Live!');
+  console.log(' Listening on port: ' + PORT);
+  console.log(' Wishes API: /api/wishes');
+  console.log('=======================================================');
+});
+
+// 2. Connect to MongoDB Atlas in the background
+async function connectDatabase() {
   try {
     console.log('Connecting to MongoDB Atlas (weddinglamiazenbaq.wishes)...');
     await mongoose.connect(MONGO_URI);
     console.log('✓ Connected to MongoDB Atlas successfully!');
-
     await seedInitialWishes();
-
-    app.listen(PORT, () => {
-      console.log('=======================================================');
-      console.log(' Linsha & Shihab Wedding Server is Live!');
-      console.log(' Open Invitation in Browser:');
-      console.log(`    http://localhost:${PORT}`);
-      console.log(' Wishes API:');
-      console.log(`    http://localhost:${PORT}/api/wishes`);
-      console.log('=======================================================');
-    });
   } catch (err) {
     console.error('MongoDB connection error:', err.message);
-    process.exit(1);
   }
 }
 
-startServer();
+connectDatabase();
