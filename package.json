@@ -4,7 +4,7 @@
   "description": "Linsha & Shihab Wedding Invitation with MongoDB Wishes Guestbook",
   "scripts": {
     "start": "node linshaandshihab.js",
-    "server": "node server.js",
+    "server": "node linshaandshihab.js",
     "build": "echo 'Static frontend assets ready'"
   },
   "dependencies": {
