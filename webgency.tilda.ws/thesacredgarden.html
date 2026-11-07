@@ -222,17 +222,22 @@ document.addEventListener('DOMContentLoaded',t_setvisRecs);}})();</script></head
   }
 
   function triggerHeroPlay() {
+    var hv = getHeroVideo();
+    if (!hv) {
+      if (!window._heroInitAttached) {
+        window._heroInitAttached = true;
+        document.addEventListener('DOMContentLoaded', triggerHeroPlay);
+      }
+      return;
+    }
     if (heroStarted) return;
     heroStarted = true;
-    var hv = getHeroVideo();
-    if (hv) {
-      setupHeroVideo();
-      hv.muted = true;
-      hv.defaultMuted = true;
-      hv.currentTime = 0;
-      var hp = hv.play();
-      if (hp && hp.catch) hp.catch(function(){});
-    }
+    setupHeroVideo();
+    hv.muted = true;
+    hv.defaultMuted = true;
+    hv.currentTime = 0;
+    var hp = hv.play();
+    if (hp && hp.catch) hp.catch(function(){});
   }
 
   if (document.readyState === 'loading') {
