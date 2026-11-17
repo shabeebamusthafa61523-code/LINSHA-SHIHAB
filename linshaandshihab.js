@@ -191,25 +191,46 @@ const Wish = mongoose.model('Wish', WishSchema, 'wishes');
 // ============================================================================
 const defaultSeedWishes = [
   {
+    name: "Suhail & Hiba",
+    attendance: "Joyfully Attending",
+    wedding: "linshaandshihab",
+    wish: "Wishing you both a lifetime of love, laughter, and endless happiness. Congratulations Linsha & Shihab!",
+    date: "Just now"
+  },
+  {
+    name: "Rinsha & Family",
+    attendance: "Joyfully Attending",
+    wedding: "linshaandshihab",
+    wish: "May Allah bless your married life with peace, joy, and prosperity. Heartiest congratulations to the wonderful couple!",
+    date: "Today"
+  },
+  {
+    name: "Naveen & Anjali",
+    attendance: "Joyfully Attending",
+    wedding: "linshaandshihab",
+    wish: "So happy for you both! Wishing you a blessed and beautiful new journey together.",
+    date: "Yesterday"
+  },
+  {
     name: "Adil & Nadiya",
     attendance: "Joyfully Attending",
     wedding: "linshaandshihab",
     wish: "Heartiest congratulations Linsha and Shihab! May Allah bless your beautiful union with eternal love, happiness, and peace. Can't wait to celebrate with you at Keyath Garden!",
-    date: "Yesterday"
+    date: "2 days ago"
   },
   {
     name: "Shamna & Ramees",
     attendance: "Joyfully Attending",
     wedding: "linshaandshihab",
     wish: "Wishing the sweetest couple a lifetime of joy, laughter, and endless blessings. Looking forward to Nov 28th!",
-    date: "2 days ago"
+    date: "3 days ago"
   },
   {
     name: "Dr. Farhan & Family",
     attendance: "Joyfully Attending",
     wedding: "linshaandshihab",
     wish: "May your journey together be filled with harmony, prosperity, and cherished moments. Congratulations Linsha & Shihab!",
-    date: "3 days ago"
+    date: "4 days ago"
   }
 ];
 
