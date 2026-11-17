@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: linsha-shihab
+    runtime: node
+    plan: free
+    region: singapore
+    branch: main
+    buildCommand: npm install
+    startCommand: node linshaandshihab.js
+    envVars:
+      - key: MONGO_URI
+        value: mongodb+srv://shabeeba:9995982324@cluster0.i23tzbf.mongodb.net/weddinglamiazenbaq?retryWrites=true&w=majority

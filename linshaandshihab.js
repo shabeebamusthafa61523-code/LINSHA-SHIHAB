@@ -289,7 +289,7 @@ async function startServer() {
 
     await seedInitialWishes();
 
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       console.log('=======================================================');
       console.log(' Linsha & Shihab Wedding Server is Live!');
       console.log(' Open Invitation in Browser:');
