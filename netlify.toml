@@ -1,7 +1,9 @@
-[[redirects]]
-  from = "/"
-  to = "/webgency.tilda.ws/thesacredgarden830f.html"
-  status = 302
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, HEAD, OPTIONS"
+    Access-Control-Allow-Headers = "*"
 
 [[redirects]]
   from = "/api/*"
