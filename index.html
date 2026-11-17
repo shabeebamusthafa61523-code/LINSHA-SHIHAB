@@ -93,6 +93,23 @@
       background: #332519;
     }
   </style>
+
+<style id="hide-netlify-elements">
+  /* Hide any Netlify badge, drawer, or HUD overlays */
+  iframe[src*="netlify"],
+  iframe[id*="netlify"],
+  #netlify-badge,
+  [data-netlify-drawer],
+  netlify-drawer,
+  div[class*="netlify-drawer"],
+  .netlify-badge {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+</style>
+
 </head>
 <body>
   <div class="loading-card">
