@@ -49,7 +49,7 @@
     },
     {
       "source": "/api/:match*",
-      "destination": "https://linsha-shihab.onrender.com/api/:match*"
+      "destination": "https://linsha-shihab-1.onrender.com/api/:match*"
     }
   ],
   "headers": [
